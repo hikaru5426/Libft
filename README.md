@@ -110,6 +110,6 @@ cc -Wall -Wextra -Werror main.c -L. -lft -o my_program
 - GNU `ar` documentation, for building a static library
 - Peer discussions and the evaluation sheet, for edge cases to test
 
-## Usage of IA
+## Usage of AI
 
-- IA was partly used to write the README file
+- AI was partly used to write the README file
