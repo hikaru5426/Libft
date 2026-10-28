@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmolinie <tmolinie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hikaru <hikaru@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 15:49:30 by tmolinie          #+#    #+#             */
-/*   Updated: 2026/10/23 17:07:24 by tmolinie         ###   ########.fr       */
+/*   Updated: 2026/10/28 13:17:13 by hikaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,16 @@ static size_t	ft_count_word(const char *str, char sep)
 
 	idx = 0;
 	nb_words = 0;
-	if (str[idx] == sep)
-		idx++;
-	else if (str[idx] && str[idx] != sep)
-	{
-		nb_words++;
-		idx++;
-	}
 	while (str[idx])
 	{
-		if (str[idx - 1] == sep && str[idx] != sep)
+		if (str[idx] == sep)
+			idx++;
+		else
+		{
 			nb_words++;
-		idx++;
+			while (str[idx] && str[idx] != sep)
+				idx++;
+		}
 	}
 	return (nb_words);
 }
@@ -45,6 +43,8 @@ static char	*ft_create_word(const char *str, char sep)
 	while (str[len] && str[len] != sep)
 		len++;
 	word = malloc((len + 1) * sizeof(char));
+	if (word == NULL)
+		return (NULL);
 	idx = 0;
 	while (idx < len)
 	{
@@ -55,42 +55,53 @@ static char	*ft_create_word(const char *str, char sep)
 	return (word);
 }
 
-static char	*ft_start(const char *str, char sep, size_t *idx, size_t *word)
+static void	ft_free_tab(char **tab, size_t nb_words)
 {
-	if (str[*idx] == sep)
+	while (nb_words > 0)
 	{
-		(*idx)++;
+		nb_words--;
+		free(tab[nb_words]);
 	}
-	else if (str[*idx])
+	free(tab);
+}
+
+static int	ft_fill_tab(char **tab, const char *str, char sep)
+{
+	size_t	idx;
+	size_t	word;
+
+	idx = 0;
+	word = 0;
+	while (str[idx])
 	{
-		(*word)++;
-		(*idx)++;
-		return (ft_create_word(&str[0], sep));
+		if (str[idx] == sep)
+			idx++;
+		else
+		{
+			tab[word] = ft_create_word(&str[idx], sep);
+			if (tab[word] == NULL)
+			{
+				ft_free_tab(tab, word);
+				return (0);
+			}
+			idx += ft_strlen(tab[word]);
+			word++;
+		}
 	}
-	return (NULL);
+	tab[word] = NULL;
+	return (1);
 }
 
 char	**ft_split(char const *str, char sep)
 {
 	char	**tab;
-	size_t	idx;
-	size_t	word;
 
+	if (str == NULL)
+		return (NULL);
 	tab = malloc((ft_count_word(str, sep) + 1) * sizeof(char *));
 	if (tab == NULL)
 		return (NULL);
-	idx = 0;
-	word = 0;
-	tab[0] = ft_start(str, sep, &idx, &word);
-	while (str[idx])
-	{
-		if (str[idx - 1] == sep && str[idx] != sep)
-		{
-			tab[word] = ft_create_word(&str[idx], sep);
-			word++;
-		}
-		idx++;
-	}
-	tab[word] = NULL;
+	if (!ft_fill_tab(tab, str, sep))
+		return (NULL);
 	return (tab);
 }

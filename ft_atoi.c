@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmolinie <tmolinie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hikaru <hikaru@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 16:38:42 by tmolinie          #+#    #+#             */
-/*   Updated: 2026/10/22 14:53:36 by tmolinie         ###   ########.fr       */
+/*   Updated: 2026/10/28 13:06:57 by hikaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ int	ft_atoi(const char *str)
 		nb = nb * 10 + str[idx] - '0';
 		idx++;
 	}
-	return ((int)nb * sign);
+	return ((int)(nb * sign));
 }
